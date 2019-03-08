@@ -1,16 +1,134 @@
 <template>
   <div class="childWorld">
     <h1>{{msg}}</h1>
-    <p>{{age}}</p>
+    <p ref="age">{{age}}</p>
+    <button @click="tell">emit</button>
+    <input type="text"
+      v-model="textInput">
+    <button @click="setName">设置名字</button>
+    <button @click="getName">获取名字</button>
+    <Cascader :data="addressDdata" v-model="currentAddress" @on-change = 'update()' class="address-select"></Cascader>
   </div>
 </template>
 
 <script lang='ts'>
-import { Component, Vue, Prop } from 'vue-property-decorator'
+import {
+  Component,
+  Vue,
+  Prop,
+  Emit,
+  Watch,
+  Provide
+} from 'vue-property-decorator'
 @Component({})
 export default class ChildWorld extends Vue {
-  msg = 'childWorld'
-  @Prop({type: Number, default: 0})
-  age
+  msg = 'childWorld';
+  textInput = '';
+  currentAddress = []
+  addressDdata = [
+    {
+      value: 'beijing',
+      label: '北京',
+      children: [
+        {
+          value: 'gugong',
+          label: '故宫',
+          children: [
+            {
+              value: 'ceshi1',
+              label: '测试1',
+              children: [
+                {
+                  value: 'ceshi2',
+                  label: '测试2',
+                  children: [
+                    {
+                      value: 'ceshi3',
+                      label: '测试3'
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          value: 'tiantan',
+          label: '天坛'
+        },
+        {
+          value: 'wangfujing',
+          label: '王府井'
+        }
+      ]
+    },
+    {
+      value: 'jiangsu',
+      label: '江苏',
+      children: [
+        {
+          value: 'nanjing',
+          label: '南京',
+          children: [
+            {
+              value: 'fuzimiao',
+              label: '夫子庙'
+            }
+          ]
+        },
+        {
+          value: 'suzhou',
+          label: '苏州',
+          children: [
+            {
+              value: 'zhuozhengyuan',
+              label: '拙政园'
+            },
+            {
+              value: 'shizilin',
+              label: '狮子林'
+            }
+          ]
+        }
+      ]
+    }
+  ];
+  @Provide() msg1 = 'private variable';
+  tell () {
+    return this.msg + 1
+  }
+  @Prop({ type: Number, default: 0 })
+  age;
+  @Emit('say')
+  @Watch('msg')
+  msgChange (val, oldVal) {
+    alert('msg is changed')
+  }
+  @Watch('currentAddress')
+  getCurrent (val, oldVal) {
+    console.log(val, oldVal)
+  }
+  setName () {
+    this.$store.commit('SET_NAME', this.textInput)
+  }
+  getName () {
+    alert(this.$store.getters.name)
+  }
+  update () {
+    console.log(1)
+  }
+  mounted () {
+    console.log(this.$store.getters.age)
+  }
+  get IsOk () {
+    return this.$store.getters.isOk
+  }
 }
 </script>
+
+<style lang="scss" scope type="text/css">
+  .address-select{
+    width: 400px;
+    margin: 0 auto;
+  }
+</style>
