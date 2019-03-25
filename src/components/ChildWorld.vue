@@ -1,7 +1,8 @@
 <template>
   <div class="childWorld">
     <h1>{{msg}}</h1>
-    <p ref="age">{{age}}</p>
+    <p ref="age">年龄{{age}}</p>
+    <!-- <p>姓名: {{name}}</p> -->
     <button @click="tell">emit</button>
     <input type="text"
       v-model="textInput">
@@ -20,6 +21,7 @@ import {
   Watch,
   Provide
 } from 'vue-property-decorator'
+import { EventBus } from './event-bus.js'
 @Component({})
 export default class ChildWorld extends Vue {
   msg = 'childWorld';
@@ -119,6 +121,15 @@ export default class ChildWorld extends Vue {
   }
   mounted () {
     console.log(this.$store.getters.age)
+    EventBus.$on('substractie', ({num1, num2}) => {
+      console.log(num1 - num2)
+    })
+    EventBus.$on('testText', ({test}) => {
+      console.log(test)
+    })
+    EventBus.$on('add', ({num1, num2}) => {
+      console.log(num1 + num2)
+    })
   }
   get IsOk () {
     return this.$store.getters.isOk

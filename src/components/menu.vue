@@ -1,87 +1,110 @@
 <template>
-  <div>
-    <Menu active-name="1-2"
-    ref="menu"
-      :open-names="['neirognguanli']">
-      <Submenu :name="item.name"
-        v-for="(item, index) in menu"
-        :key="index">
-        <template slot="title">
-          <Icon type="ios-paper" />
-        {{ item.label }}
-        </template>
-        <div v-if="item.children">
-          <MenuItem :name="item1.name" v-for="(item1, index) in item.children" :key="index" :to="item1.name">
-          {{ item1.children ? '': item1.label }}
-          <div v-if="item1.children">
-              <Submenu name="item1.name">
-                <template slot="title">
-                  <Icon type="ios-paper" />
-                  {{item1.label}}
-                </template>
-                <MenuItem :name="item2.label" v-for="(item2, index) in item1.children" :key="index" :to="item2.label">{{ item2.label }}</MenuItem>
-              </Submenu>
-            </div>
-            </MenuItem>
-        </div>
-      </Submenu>
-    </Menu>
+  <div class="layout">
+    <Layout :style="{minHeight: '100vh'}">
+      <Sider collapsible
+        :collapsed-width="78"
+        v-model="isCollapsed">
+        <Menu active-name="1-2"
+          theme="dark"
+          width="auto"
+          :class="menuitemClasses">
+          <MenuItem name="1-1">
+          <Icon type="ios-navigate"></Icon>
+          <span>Option 1</span>
+          </MenuItem>
+          <MenuItem name="1-2">
+          <Icon type="search"></Icon>
+          <span>Option 2</span>
+          </MenuItem>
+          <MenuItem name="1-3">
+          <Icon type="settings"></Icon>
+          <span>Option 3</span>
+          </MenuItem>
+        </Menu>
+      </Sider>
+      <Sider collapsible
+        :collapsed-width="78"
+        v-model="isCollapsed1">
+        <Menu active-name="1-2"
+          theme="dark"
+          width="auto"
+          :class="menuitemClasses">
+          <MenuItem name="1-1">
+          <Icon type="ios-navigate"></Icon>
+          <span>Option 1</span>
+          </MenuItem>
+          <MenuItem name="1-2">
+          <Icon type="search"></Icon>
+          <span>Option 2</span>
+          </MenuItem>
+          <MenuItem name="1-3">
+          <Icon type="settings"></Icon>
+          <span>Option 3</span>
+          </MenuItem>
+        </Menu>
+      </Sider>
+      <Layout>
+        <Header :style="{background: '#fff', boxShadow: '0 2px 3px 2px rgba(0,0,0,.1)'}"></Header>
+        <Content :style="{padding: '0 16px 16px'}">
+          <Breadcrumb :style="{margin: '16px 0'}">
+            <BreadcrumbItem>Home</BreadcrumbItem>
+            <BreadcrumbItem>Components</BreadcrumbItem>
+            <BreadcrumbItem>Layout</BreadcrumbItem>
+          </Breadcrumb>
+          <Card>
+            <div style="height: 600px">Content</div>
+          </Card>
+        </Content>
+      </Layout>
+    </Layout>
   </div>
 </template>
 
 <script lang="js">
-export default {
-  data () {
-    return {
-      menu: [
-        {
-          label: '内容管理',
-          name: 'neirognguanli',
-          children: [
-            {
-              label: '评论管理',
-              name: 'pinglunguanli'
-            },
-            {
-              label: '举报管理',
-              name: 'jubaoguanli'
-            },
-            {
-              label: '测试三级导航',
-              name: 'sanjidaohang',
-              children: [
-                {
-                  label: '1',
-                  name: '1'
-                },
-                {
-                  label: '2',
-                  name: '2'
-                }
-              ]
+  export default {
+    data () {
+      return {
+      isCollapsed: false
+      }
+    },
+        computed: {
+            menuitemClasses: function () {
+                return [
+                    'menu-item',
+                    this.isCollapsed ? 'collapsed-menu' : ''
+                ]
             }
-          ]
-        },
-        {
-          label: '用户管理',
-          name: 'yonghu'
         }
-      ]
     }
-  },
-  mounted () {
-    const that = this
-    that.$nextTick(() => {
-      that.$refs.menu.updateOpened()
-    })
-  },
-  watch: {
-    '$route': 'isChange'
-  },
-  methods: {
-    isChange () {
-      console.log(this.$route)
-    }
-  }
-}
 </script>
+<style scoped>
+.layout-con {
+  height: 100%;
+  width: 100%;
+}
+.menu-item span {
+  display: inline-block;
+  overflow: hidden;
+  width: 69px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+  transition: width 0.2s ease 0.2s;
+}
+.menu-item i {
+  transform: translateX(0px);
+  transition: font-size 0.2s ease, transform 0.2s ease;
+  vertical-align: middle;
+  font-size: 16px;
+}
+.collapsed-menu span {
+  width: 0px;
+  transition: width 0.2s ease;
+}
+.collapsed-menu i {
+  transform: translateX(5px);
+  transition: font-size 0.2s ease 0.2s, transform 0.2s ease 0.2s;
+  vertical-align: middle;
+  font-size: 22px;
+}
+</style>

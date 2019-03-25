@@ -1,23 +1,30 @@
 <template>
   <div class="hello">
-      <!-- <h1>{{ msg }}</h1>
-  <child-world :age=age
-    @say=Say></child-world>
-  <hr>
-  {{say}}
-  <Table border
-    ref="selection"
-    :columns="columns4"
-    :data="data1"></Table> -->
-  <p>{{isOK.answer}}</p>
-  <p>{{isOK.force}}</p>
-  <img :src="isOK.image" alt="">
+    <h1>{{ msg }}</h1>
+    <child-world :age=age
+      :name=name
+      @say=Say></child-world>
+    <hr>
+    {{say}}
+    <Table border
+      ref="selection"
+      :columns="columns4"
+      :data="data1"></Table>
+    <p>答案： {{isOkAnswer}}</p>
+    <p>是否有力量的forced: {{isOkforced}}</p>
+    <img :src="isOkImg"
+      alt=""
+      class="isOk">
+      <button @click="subtractie">测试EventBus --- subtractie</button>
+      <button @click="test">测试EventBus ---  test</button>
+      <button @click="add">测试EventBus --- add</button>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import ChildWorld from './ChildWorld.vue'
+import { EventBus } from './event-bus.js'
 @Component({
   components: {
     ChildWorld
@@ -27,6 +34,7 @@ export default class HelloWorld extends Vue {
   msg = 'Welcome to Your Vue.js App';
   say = '';
   age = 12;
+  name = 'xxxbai';
   columns4 = [
     {
       type: 'selection',
@@ -75,8 +83,31 @@ export default class HelloWorld extends Vue {
   Say (saysomething) {
     this.say = saysomething
   }
-  get isOk () {
-    return this.$store.getters.isOk
+  test () {
+    EventBus.$emit('testText', {
+      test: 'ceshicehis'
+    })
+  }
+  add () {
+    EventBus.$emit('add', {
+      num1: 1,
+      num2: 2
+    })
+  }
+  subtractie () {
+    EventBus.$emit('substractie', {
+      num1: 2,
+      num2: 2
+    })
+  }
+  get isOkImg () {
+    return this.$store.getters.isOk.image
+  }
+  get isOkforced () {
+    return this.$store.getters.isOk.forced
+  }
+  get isOkAnswer () {
+    return this.$store.getters.isOk.answer
   }
 }
 
@@ -98,5 +129,9 @@ li {
 }
 a {
   color: #42b983;
+}
+.isOk {
+  width: 40px;
+  height: 40px;
 }
 </style>
