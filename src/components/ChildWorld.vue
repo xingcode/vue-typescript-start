@@ -2,13 +2,14 @@
   <div class="childWorld">
     <h1>{{msg}}</h1>
     <p ref="age">年龄{{age}}</p>
-    <!-- <p>姓名: {{name}}</p> -->
+    <p>姓名: {{name}}</p>
     <button @click="tell">emit</button>
     <input type="text"
       v-model="textInput">
     <button @click="setName">设置名字</button>
     <button @click="getName">获取名字</button>
-    <Cascader :data="addressDdata" v-model="currentAddress" @on-change = 'update()' class="address-select"></Cascader>
+    <Cascader :data="addressDdata" v-model="currentAddress" @on-change = 'update()' class="address-select" @input='testInfot'></Cascader>
+    <list-scroll :source="listData" style="width: 400px;"></list-scroll>
   </div>
 </template>
 
@@ -22,7 +23,12 @@ import {
   Provide
 } from 'vue-property-decorator'
 import { EventBus } from './event-bus.js'
-@Component({})
+import listScroll from './listScroll.vue'
+@Component({
+  components: {
+    listScroll
+  }
+})
 export default class ChildWorld extends Vue {
   msg = 'childWorld';
   textInput = '';
@@ -95,12 +101,97 @@ export default class ChildWorld extends Vue {
       ]
     }
   ];
+  listData = [
+    {
+      textArr: [
+        '1',
+        '某个地方',
+        '10',
+        '100',
+        '10'
+      ]
+    },
+    {
+      textArr: [
+        '2',
+        '某个地方',
+        '10',
+        '100',
+        '10'
+      ]
+    },
+    {
+      textArr: [
+        '3',
+        '某个地方',
+        '10',
+        '100',
+        '10'
+      ]
+    },
+    {
+      textArr: [
+        '4',
+        '某个地方',
+        '10',
+        '100',
+        '10'
+      ]
+    },
+    {
+      textArr: [
+        '5',
+        '某个地方',
+        '10',
+        '100',
+        '10'
+      ]
+    },
+    {
+      textArr: [
+        '6',
+        '某个地方',
+        '10',
+        '100',
+        '10'
+      ]
+    },
+    {
+      textArr: [
+        '7',
+        '某个地方',
+        '10',
+        '100',
+        '10'
+      ]
+    },
+    {
+      textArr: [
+        '8',
+        '某个地方',
+        '10',
+        '100',
+        '10'
+      ]
+    },
+    {
+      textArr: [
+        '8',
+        '某个地方',
+        '10',
+        '100',
+        '10'
+      ]
+    }
+  ]
   @Provide() msg1 = 'private variable';
   tell () {
     return this.msg + 1
   }
   @Prop({ type: Number, default: 0 })
   age;
+  @Prop({ type: String, default: 'xxb' })
+  name;
   @Emit('say')
   @Watch('msg')
   msgChange (val, oldVal) {
@@ -118,6 +209,9 @@ export default class ChildWorld extends Vue {
   }
   update () {
     console.log(1)
+  }
+  testInfot () {
+    alert('handleInput')
   }
   mounted () {
     console.log(this.$store.getters.age)

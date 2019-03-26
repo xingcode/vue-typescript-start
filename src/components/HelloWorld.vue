@@ -15,9 +15,9 @@
     <img :src="isOkImg"
       alt=""
       class="isOk">
-      <button @click="subtractie">测试EventBus --- subtractie</button>
-      <button @click="test">测试EventBus ---  test</button>
-      <button @click="add">测试EventBus --- add</button>
+      <Button type="info" @click="subtractie" icon="md-remove-circle">测试EventBus --- subtractie</Button>
+      <Button type="success" @click="test">测试EventBus ---  test</Button>
+      <Button type="warning" @click="add" icon="ios-add">测试EventBus --- add</Button>
   </div>
 </template>
 
@@ -108,6 +108,11 @@ export default class HelloWorld extends Vue {
   }
   get isOkAnswer () {
     return this.$store.getters.isOk.answer
+  }
+  beforeDestroy () {
+    EventBus.$off('testText')
+    EventBus.$off('add')
+    EventBus.$off('substractie')
   }
 }
 
