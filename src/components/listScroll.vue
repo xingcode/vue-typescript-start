@@ -34,13 +34,6 @@
           </div>
         </div>
       </li>
-      <li style="display:flex">
-        <div class="header-tab list-row"
-          v-for="(des, cIndex) in source[0].textArr"
-          :key="cIndex" style="flex: 1">
-          <span>{{formatValue(cIndex,des)}}</span>
-        </div>
-      </li>
     </ul>
   </div>
 </template>

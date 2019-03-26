@@ -24,8 +24,8 @@
   overflow: hidden;
   border: 1px solid #ddd;
 }
-.seamless-warp > div  > div{
-  background: #333;
+.seamless-warp  .item{
+  /* background: #333; */
 }
 .seamless-warp .item li {
   height: 30px;
@@ -80,6 +80,8 @@ export default {
         singleWidth: 30
       }
     }
+  },
+  beforeDestroy () {
   }
 }
 </script>
