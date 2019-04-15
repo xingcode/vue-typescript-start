@@ -1,110 +1,114 @@
 <template>
-  <div class="layout">
-    <Layout :style="{minHeight: '100vh'}">
-      <Sider collapsible
-        :collapsed-width="78"
-        v-model="isCollapsed">
-        <Menu active-name="1-2"
-          theme="dark"
-          width="auto"
-          :class="menuitemClasses">
-          <MenuItem name="1-1">
-          <Icon type="ios-navigate"></Icon>
-          <span>Option 1</span>
-          </MenuItem>
-          <MenuItem name="1-2">
-          <Icon type="search"></Icon>
-          <span>Option 2</span>
-          </MenuItem>
-          <MenuItem name="1-3">
-          <Icon type="settings"></Icon>
-          <span>Option 3</span>
-          </MenuItem>
-        </Menu>
-      </Sider>
-      <Sider collapsible
-        :collapsed-width="78"
-        v-model="isCollapsed1">
-        <Menu active-name="1-2"
-          theme="dark"
-          width="auto"
-          :class="menuitemClasses">
-          <MenuItem name="1-1">
-          <Icon type="ios-navigate"></Icon>
-          <span>Option 1</span>
-          </MenuItem>
-          <MenuItem name="1-2">
-          <Icon type="search"></Icon>
-          <span>Option 2</span>
-          </MenuItem>
-          <MenuItem name="1-3">
-          <Icon type="settings"></Icon>
-          <span>Option 3</span>
-          </MenuItem>
-        </Menu>
-      </Sider>
-      <Layout>
-        <Header :style="{background: '#fff', boxShadow: '0 2px 3px 2px rgba(0,0,0,.1)'}"></Header>
-        <Content :style="{padding: '0 16px 16px'}">
-          <Breadcrumb :style="{margin: '16px 0'}">
-            <BreadcrumbItem>Home</BreadcrumbItem>
-            <BreadcrumbItem>Components</BreadcrumbItem>
-            <BreadcrumbItem>Layout</BreadcrumbItem>
-          </Breadcrumb>
-          <Card>
-            <div style="height: 600px">Content</div>
-          </Card>
-        </Content>
-      </Layout>
-    </Layout>
-  </div>
+    <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
+        <FormItem label="Name" prop="name">
+            <Input v-model="formValidate.name" placeholder="Enter your name"></Input>
+        </FormItem>
+        <FormItem label="E-mail" prop="mail">
+            <Input v-model="formValidate.mail" placeholder="Enter your e-mail"></Input>
+        </FormItem>
+        <FormItem label="City" prop="city">
+            <Select v-model="formValidate.city" placeholder="Select your city">
+                <Option value="beijing">New York</Option>
+                <Option value="shanghai">London</Option>
+                <Option value="shenzhen">Sydney</Option>
+            </Select>
+        </FormItem>
+        <FormItem label="Date">
+            <Row>
+                <Col span="11">
+                    <FormItem prop="date">
+                        <DatePicker type="date" placeholder="Select date" v-model="formValidate.date"></DatePicker>
+                    </FormItem>
+                </Col>
+                <Col span="2" style="text-align: center">-</Col>
+                <Col span="11">
+                    <FormItem prop="time">
+                        <TimePicker type="time" placeholder="Select time" v-model="formValidate.time"></TimePicker>
+                    </FormItem>
+                </Col>
+            </Row>
+        </FormItem>
+        <FormItem label="Gender" prop="gender">
+            <RadioGroup v-model="formValidate.gender">
+                <Radio label="male">Male</Radio>
+                <Radio label="female">Female</Radio>
+            </RadioGroup>
+        </FormItem>
+        <FormItem label="Hobby" prop="interest">
+            <CheckboxGroup v-model="formValidate.interest">
+                <Checkbox label="Eat"></Checkbox>
+                <Checkbox label="Sleep"></Checkbox>
+                <Checkbox label="Run"></Checkbox>
+                <Checkbox label="Movie"></Checkbox>
+            </CheckboxGroup>
+        </FormItem>
+        <FormItem label="Desc" prop="desc">
+            <Input v-model="formValidate.desc" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..."></Input>
+        </FormItem>
+        <FormItem>
+            <Button type="primary" @click="handleSubmit('formValidate')">Submit</Button>
+            <Button @click="handleReset('formValidate')" style="margin-left: 8px">Reset</Button>
+        </FormItem>
+    </Form>
 </template>
-
-<script lang="js">
-  export default {
-    data () {
-      return {
-      isCollapsed: false
-      }
-    },
-        computed: {
-            menuitemClasses: function () {
-                return [
-                    'menu-item',
-                    this.isCollapsed ? 'collapsed-menu' : ''
-                ]
+<script>
+    export default {
+        data () {
+            return {
+                formValidate: {
+                    name: '',
+                    mail: '',
+                    city: '',
+                    gender: '',
+                    interest: [],
+                    date: '',
+                    time: '',
+                    desc: ''
+                },
+                ruleValidate: {
+                    name: [
+                        { required: true, message: 'The name cannot be empty', trigger: 'blur' }
+                    ],
+                    mail: [
+                        { required: true, message: 'Mailbox cannot be empty', trigger: 'blur' },
+                        { type: 'email', message: 'Incorrect email format', trigger: 'blur' }
+                    ],
+                    city: [
+                        { required: true, message: 'Please select the city', trigger: 'change' }
+                    ],
+                    gender: [
+                        { required: true, message: 'Please select gender', trigger: 'change' }
+                    ],
+                    interest: [
+                        { required: true, type: 'array', min: 1, message: 'Choose at least one hobby', trigger: 'change' },
+                        { type: 'array', max: 2, message: 'Choose two hobbies at best', trigger: 'change' }
+                    ],
+                    date: [
+                        { required: true, type: 'date', message: 'Please select the date', trigger: 'change' }
+                    ],
+                    time: [
+                        { required: true, type: 'string', message: 'Please select time', trigger: 'change' }
+                    ],
+                    desc: [
+                        { required: true, message: 'Please enter a personal introduction', trigger: 'blur' },
+                        { type: 'string', min: 20, message: 'Introduce no less than 20 words', trigger: 'blur' }
+                    ]
+                }
+            }
+        },
+        methods: {
+            handleSubmit (name) {
+                this.$refs[name].validate((valid) => {
+                    if (valid) {
+                        this.$Message.success('Success!');
+                    } else {
+                        this.$Message.error('Fail!');
+                    }
+                })
+            },
+            handleReset (name) {
+                this.$refs[name].resetFields();
             }
         }
     }
 </script>
-<style scoped>
-.layout-con {
-  height: 100%;
-  width: 100%;
-}
-.menu-item span {
-  display: inline-block;
-  overflow: hidden;
-  width: 69px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  vertical-align: bottom;
-  transition: width 0.2s ease 0.2s;
-}
-.menu-item i {
-  transform: translateX(0px);
-  transition: font-size 0.2s ease, transform 0.2s ease;
-  vertical-align: middle;
-  font-size: 16px;
-}
-.collapsed-menu span {
-  width: 0px;
-  transition: width 0.2s ease;
-}
-.collapsed-menu i {
-  transform: translateX(5px);
-  transition: font-size 0.2s ease 0.2s, transform 0.2s ease 0.2s;
-  vertical-align: middle;
-  font-size: 22px;
-}
-</style>

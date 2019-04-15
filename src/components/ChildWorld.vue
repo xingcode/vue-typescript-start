@@ -8,7 +8,7 @@
       v-model="textInput">
     <button @click="setName">设置名字</button>
     <button @click="getName">获取名字</button>
-    <Cascader :data="addressDdata" v-model="currentAddress" @on-change = 'update()' class="address-select" @input='testInfot'></Cascader>
+    <Cascader :data="addressDdata" v-model="currentAddress" @on-change = 'update()' class="address-select" @input='testInfot' :value="北京"></Cascader>
     <list-scroll :source="listData" style="width: 400px;"></list-scroll>
   </div>
 </template>
